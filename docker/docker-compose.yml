@@ -44,7 +44,7 @@ services:
       - ../data:/data
       - ../config:/config
       - isaac_cache:/root/.cache/ov
-      - /home/codelab/Desktop/Project/isaac-sim-mcp:/opt/isaac-sim-mcp:ro
+      - ../../isaac-sim-mcp:/opt/isaac-sim-mcp:ro
       - ./isaacsim.streaming.mcp.kit:/opt/kit/isaacsim.streaming.mcp.kit:ro
       - ./entrypoint-mcp.sh:/entrypoint-mcp.sh:ro
       - ./enable_mcp.py:/opt/kit/enable_mcp.py:ro

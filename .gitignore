@@ -19,8 +19,8 @@ __pycache__/
 # AppImage 바이너리 (용량 큼, QUICKSTART.md에 다운로드 링크 있음)
 *.AppImage
 
-# Claude 로컬 설정
-.claude/settings.local.json
+# Claude 설정 — settings.local.json은 다른 환경 세팅용으로 버전 관리에 포함
+!.claude/settings.local.json
 
-# 프로젝트 로컬 메모리 (세션 교훈, 개인 메모)
-.memory/
+# 프로젝트 메모리 — 다른 환경 세팅용으로 버전 관리에 포함
+# .memory/

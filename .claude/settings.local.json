@@ -34,7 +34,6 @@
       "Bash(echo \"alias ccc='claude --continue'\")",
       "Bash(fc-list :lang=ko)",
       "Read(//home/codelab/**)",
-      "Bash(chmod +x /home/codelab/Desktop/Project/DATAFACTORY/scripts/clean_storage.sh)",
       "Bash(docker compose *)",
       "Bash(gh --version)",
       "Bash(git --version)",
@@ -59,7 +58,6 @@
       "Bash(ngc registry *)",
       "Bash(ngc --help)",
       "Bash(ngc --version)",
-      "Bash(bash -c \"cat /home/codelab/Desktop/Project/DATAFACTORY/.memory/MEMORY.md 2>/dev/null | jq -Rs '{hookSpecificOutput: {hookEventName: \\\\\"SessionStart\\\\\", additionalContext: \\(\\\\\"## DATAFACTORY 프로젝트 메모리\\\\\\\\n\\\\\" + .\\)}}'\")",
       "Bash(docker image ls *)",
       "Bash(docker stop *)",
       "Bash(docker rm *)",
@@ -71,7 +69,6 @@
       "Bash(uvx --version)",
       "Bash(uv pip *)",
       "Bash(uv venv *)",
-      "Bash(ln -s /home/codelab/Desktop/Project/isaac-sim-mcp/isaac.sim.mcp_extension /home/codelab/Desktop/Project/isaac-sim-mcp/isaac_sim_mcp_extension)",
       "Bash(awk '/2026-04-17 02:43:22/,0')",
       "Bash(ln -s isaac.sim.mcp_extension isaac_sim_mcp_extension)",
       "Bash(wezterm *)",
@@ -105,7 +102,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "{ echo '## AGENTS.md (프로젝트 지침)'; cat /home/codelab/Desktop/Project/DATAFACTORY/AGENTS.md 2>/dev/null; echo; echo '## DATAFACTORY 프로젝트 메모리'; cat /home/codelab/Desktop/Project/DATAFACTORY/.memory/MEMORY.md 2>/dev/null; } | jq -Rs '{hookSpecificOutput: {hookEventName: \"SessionStart\", additionalContext: .}}'"
+            "command": "ROOT=$(git rev-parse --show-toplevel 2>/dev/null) && { echo '## AGENTS.md (프로젝트 지침)'; cat \"$ROOT/AGENTS.md\" 2>/dev/null; echo; echo '## DATAFACTORY 프로젝트 메모리'; cat \"$ROOT/.memory/MEMORY.md\" 2>/dev/null; } | jq -Rs '{hookSpecificOutput: {hookEventName: \"SessionStart\", additionalContext: .}}'"
           }
         ]
       }
@@ -115,10 +112,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "{ echo '## AGENTS.md (프로젝트 지침)'; cat /home/codelab/Desktop/Project/DATAFACTORY/AGENTS.md 2>/dev/null; echo; echo '## DATAFACTORY 프로젝트 메모리'; cat /home/codelab/Desktop/Project/DATAFACTORY/.memory/MEMORY.md 2>/dev/null; } | jq -Rs '{hookSpecificOutput: {hookEventName: \"PostCompact\", additionalContext: .}}'"
+            "command": "ROOT=$(git rev-parse --show-toplevel 2>/dev/null) && { echo '## AGENTS.md (프로젝트 지침)'; cat \"$ROOT/AGENTS.md\" 2>/dev/null; echo; echo '## DATAFACTORY 프로젝트 메모리'; cat \"$ROOT/.memory/MEMORY.md\" 2>/dev/null; } | jq -Rs '{hookSpecificOutput: {hookEventName: \"PostCompact\", additionalContext: .}}'"
           }
         ]
       }
     ]
-  }
+  },
+  "enabledPlugins": {}
 }
