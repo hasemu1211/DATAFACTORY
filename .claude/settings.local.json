@@ -109,6 +109,16 @@
           }
         ]
       }
+    ],
+    "PostCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{ echo '## AGENTS.md (프로젝트 지침)'; cat /home/codelab/Desktop/Project/DATAFACTORY/AGENTS.md 2>/dev/null; echo; echo '## DATAFACTORY 프로젝트 메모리'; cat /home/codelab/Desktop/Project/DATAFACTORY/.memory/MEMORY.md 2>/dev/null; } | jq -Rs '{hookSpecificOutput: {hookEventName: \"PostCompact\", additionalContext: .}}'"
+          }
+        ]
+      }
     ]
   }
 }
