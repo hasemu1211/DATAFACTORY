@@ -1,9 +1,33 @@
 services:
 
-  # ── Isaac Sim (합성 데이터 생성기) ────────────────────────────────
-  isaac-sim:
+  # ── ROS2 Humble (검증 노드) — Phase 4 시공간 동기화 검증용 ──────────
+  # Phase 2~3: 불필요 / Phase 4: --profile ros2 로 추가
+  ros2:
+    build:
+      context: .
+      dockerfile: Dockerfile.ros2
+    container_name: datafactory_ros2
+    profiles: ["ros2"]
+    network_mode: host
+    ipc: host
+    stdin_open: true
+    tty: true
+    environment:
+      - ROS_DOMAIN_ID=0
+    volumes:
+      - ../data:/data
+      - ./ros2_ws:/ros2_ws
+    command: >
+      bash -c "source /opt/ros/humble/setup.bash &&
+               ros2 launch rosbridge_server rosbridge_websocket_launch.xml &
+               exec bash"
+
+  # ── Isaac Sim 스트리밍 모드 (WebRTC 시각 확인용) ──────────────────────
+  # 실행 후 호스트에서 WebRTC Streaming Client AppImage 로 127.0.0.1 접속
+  isaac-sim-streaming:
     image: nvcr.io/nvidia/isaac-sim:4.5.0
     container_name: datafactory_isaac_sim
+    profiles: ["streaming"]
     runtime: nvidia
     network_mode: host
     ipc: host
@@ -12,32 +36,41 @@ services:
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,graphics,utility
-      - DISPLAY=${DISPLAY}
       - ACCEPT_EULA=Y
+      - ROS_DISTRO=humble
+      - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+      - LD_LIBRARY_PATH=/isaac-sim/exts/isaacsim.ros2.bridge/humble/lib
     volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - ${HOME}/.Xauthority:/root/.Xauthority:rw
-      - ../data:/data                          # 생성된 합성 데이터 출력
-      - ../config:/config                      # 카메라 파라미터, 씬 설정
-      - isaac_cache:/root/.cache/ov            # 캐시 볼륨 분리 (스토리지 추적용)
-    command: ["/bin/bash"]
+      - ../data:/data
+      - ../config:/config
+      - isaac_cache:/root/.cache/ov
+      - /home/codelab/Desktop/Project/isaac-sim-mcp:/opt/isaac-sim-mcp:ro
+      - ./isaacsim.streaming.mcp.kit:/opt/kit/isaacsim.streaming.mcp.kit:ro
+      - ./entrypoint-mcp.sh:/entrypoint-mcp.sh:ro
+      - ./enable_mcp.py:/opt/kit/enable_mcp.py:ro
+    # 포트 49100 (WebRTC), 8766 (MCP extension TCP) — network_mode: host 이므로 자동 노출
+    entrypoint: ["/bin/sh", "/entrypoint-mcp.sh"]
+    command: []
 
-  # ── ROS2 Humble (검증 노드) ───────────────────────────────────────
-  ros2:
-    image: ros:humble
-    container_name: datafactory_ros2
+  # ── Isaac Sim Headless 모드 (배치 데이터 생성용) ──────────────────────
+  isaac-sim-headless:
+    image: nvcr.io/nvidia/isaac-sim:4.5.0
+    container_name: datafactory_isaac_sim
+    profiles: ["headless"]
+    runtime: nvidia
     network_mode: host
     ipc: host
-    stdin_open: true
-    tty: true
     environment:
-      - ROS_DOMAIN_ID=0
-      - DISPLAY=${DISPLAY}
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,graphics,utility
+      - ACCEPT_EULA=Y
+      - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+      - LD_LIBRARY_PATH=/isaac-sim/exts/isaacsim.ros2.bridge/humble/lib
     volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ../data:/data
-      - ./ros2_ws:/ros2_ws                     # ROS2 워크스페이스
-    command: ["/bin/bash"]
+      - ../config:/config
+      - isaac_cache:/root/.cache/ov
+    command: ["/isaac-sim/python.sh", "/data/scripts/generate.py"]
 
 volumes:
   isaac_cache:

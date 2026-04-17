@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "isaac-sim": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/home/codelab/Desktop/Project/isaac-sim-mcp",
+        "run",
+        "isaac_mcp/server.py"
+      ],
+      "env": {}
+    },
+    "ros-mcp": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "ros-mcp",
+        "--transport=stdio"
+      ],
+      "env": {}
+    }
+  }
+}
