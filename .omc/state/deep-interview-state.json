@@ -9,7 +9,7 @@
     "current_ambiguity": 0.51,
     "threshold": 0.2,
     "codebase_context": {
-      "datafactory_structure": "docker/ (streaming/headless/ros2 compose profiles), .mcp.json (isaac-sim, ros-mcp), .memory/ (세션간 교훈), .omc/ (OMC state), AGENTS.md, ENVIRONMENT_SETUP.md, QUICKSTART.md",
+      "datafactory_structure": "docker/ (streaming/headless/ros2 compose profiles), .mcp.json (isaac-sim, ros-mcp), wiki/ (세션간 교훈), .omc/ (OMC state), AGENTS.md, ENVIRONMENT_SETUP.md, QUICKSTART.md",
       "omc_global": "~/.claude/CLAUDE.md, settings.json(teammateMode=tmux, effortLevel=xhigh), .omc-config.json, hud/, omc CLI 4.13.0 글로벌 설치",
       "existing_guide": "robot-dev-omc-setup-guide.md 섹션 1-12 (디렉토리 설계, MCP 격리, tmux 워크스페이스, 컨텍스트 관리 3-layer)",
       "robot_directory": "~/robot/ 미존재",

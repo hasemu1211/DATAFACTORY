@@ -1,7 +1,7 @@
 # DATAFACTORY — Project Instructions
 
 > 새 세션 에이전트가 가장 먼저 읽어야 할 파일입니다.
-> 상세 내용은 `ENVIRONMENT_SETUP.md`, `QUICKSTART.md`, `.memory/` 참조.
+> 상세 내용은 `ENVIRONMENT_SETUP.md`, `QUICKSTART.md`, `wiki/` 참조.
 
 ---
 
@@ -131,7 +131,7 @@ DATAFACTORY/
 ├── ENVIRONMENT_SETUP.md           # 전체 환경 구축 절차
 ├── QUICKSTART.md                  # 실행 명령어 가이드
 ├── .mcp.json                      # MCP 서버 등록 (프로젝트 레벨)
-└── .memory/                       # 세션 간 교훈 (lessons_*.md)
+└── wiki/                       # 세션 간 교훈 (lessons_*.md)
 
 ~/Desktop/Project/isaac-sim-mcp/   # MCP extension 소스 (별도 레포)
 ```
@@ -140,4 +140,4 @@ DATAFACTORY/
 
 ## 메모리 위치
 
-`.memory/MEMORY.md` — 세션 시작 시 자동 로드됨
+`wiki/INDEX.md` — 세션 시작 시 자동 로드됨 (2-Tier 훅이 global `~/robot/wiki/INDEX.md`과 함께 주입)

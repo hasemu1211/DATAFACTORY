@@ -126,7 +126,14 @@
       "Bash(git -c user.name=\"hasemu1211\" -c user.email=\"hasemu1211@gmail.com\" commit -m \"chore: settings.local.json allowlist updates \\(session-accumulated\\)\")",
       "Bash(xargs -I{} sh -c 'echo \"Tracked modifications: {}\"; [ \"{}\" -eq 0 ] || exit 1')",
       "Bash(tee /tmp/pre-sed-omc-artifacts.sha256)",
-      "Bash(git -c user.name=\"hasemu1211\" -c user.email=\"hasemu1211@gmail.com\" commit -m \"chore\\(docker\\): COMPOSE_PROJECT_NAME=datafactory pin + allowlist delta\")"
+      "Bash(git -c user.name=\"hasemu1211\" -c user.email=\"hasemu1211@gmail.com\" commit -m \"chore\\(docker\\): COMPOSE_PROJECT_NAME=datafactory pin + allowlist delta\")",
+      "Bash(tee /tmp/files-to-sed.txt)",
+      "Bash(xargs -r -I{} sed -i 's|\\\\.memory/|wiki/|g' {})",
+      "Bash(sed -i 's|\\\\.memory/|wiki/|g' wiki/INDEX.md)",
+      "Read(//tmp/**)",
+      "Bash(sed -n '23,30p' .gitignore)",
+      "Bash(sed -i 's|^# 프로젝트 메모리 — 다른 환경 세팅용으로 버전 관리에 포함$|# 프로젝트 위키 — 다른 환경 세팅용으로 버전 관리에 포함|' .gitignore)",
+      "Bash(sed -i 's|^# \\\\.memory/$|# wiki/|' .gitignore)"
     ]
   },
   "enableAllProjectMcpServers": true,
@@ -139,7 +146,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "ROOT=$(git rev-parse --show-toplevel 2>/dev/null) && { echo '## AGENTS.md (프로젝트 지침)'; cat \"$ROOT/AGENTS.md\" 2>/dev/null; echo; echo '## DATAFACTORY 프로젝트 메모리'; cat \"$ROOT/.memory/MEMORY.md\" 2>/dev/null; } | jq -Rs '{hookSpecificOutput: {hookEventName: \"SessionStart\", additionalContext: .}}'"
+            "command": "PARENT=$HOME/robot; ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo \"$PARENT\"); { echo \"## Global wiki\"; cat \"$PARENT/wiki/INDEX.md\" 2>/dev/null; echo; echo \"## Project wiki\"; cat \"$ROOT/wiki/INDEX.md\" 2>/dev/null; echo; echo \"## AGENTS.md\"; cat \"$ROOT/AGENTS.md\" 2>/dev/null; } | jq -Rs '{hookSpecificOutput: {hookEventName: \"SessionStart\", additionalContext: .}}'"
           }
         ]
       }
@@ -149,7 +156,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "ROOT=$(git rev-parse --show-toplevel 2>/dev/null) && { echo '## AGENTS.md (프로젝트 지침)'; cat \"$ROOT/AGENTS.md\" 2>/dev/null; echo; echo '## DATAFACTORY 프로젝트 메모리'; cat \"$ROOT/.memory/MEMORY.md\" 2>/dev/null; } | jq -Rs '{hookSpecificOutput: {hookEventName: \"PostCompact\", additionalContext: .}}'"
+            "command": "PARENT=$HOME/robot; ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo \"$PARENT\"); { echo \"## Global wiki\"; cat \"$PARENT/wiki/INDEX.md\" 2>/dev/null; echo; echo \"## Project wiki\"; cat \"$ROOT/wiki/INDEX.md\" 2>/dev/null; echo; echo \"## AGENTS.md\"; cat \"$ROOT/AGENTS.md\" 2>/dev/null; } | jq -Rs '{hookSpecificOutput: {hookEventName: \"PostCompact\", additionalContext: .}}'"
           }
         ]
       }

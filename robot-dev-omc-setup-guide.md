@@ -396,7 +396,7 @@ chmod +x ~/robot/scripts/dev-session.sh
 
 ### 한국어 IME + tmux 주의
 - wezterm `use_ime=true` + IBus: **한글 모드에서 일부 Ctrl 조합 간섭 가능**
-- 영문 모드로도 해결 안 되는 경우 있음 (미해결 사례: `.memory/project_tmux_prefix_unresolved.md`)
+- 영문 모드로도 해결 안 되는 경우 있음 (미해결 사례: `wiki/project_tmux_prefix_unresolved.md`)
 - 워크어라운드: `tmux` 명령을 직접 호출 (`tmux split-window -h`, `tmux detach` 등)
 
 ### OMC 글로벌 설치 시 묻는 것

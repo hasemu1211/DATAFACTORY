@@ -22,8 +22,8 @@ __pycache__/
 # Claude 설정 — settings.local.json은 다른 환경 세팅용으로 버전 관리에 포함
 !.claude/settings.local.json
 
-# 프로젝트 메모리 — 다른 환경 세팅용으로 버전 관리에 포함
-# .memory/
+# 프로젝트 위키 — 다른 환경 세팅용으로 버전 관리에 포함
+# wiki/
 
 # OMC runtime state (per-session, not tracked)
 .omc/sessions/
@@ -38,3 +38,4 @@ __pycache__/
 .omc/state/ralplan-state.json
 .omc/state/mission-state.json
 .omc/state/subagent-tracking.json
+.omc/state/last-tool-error.json

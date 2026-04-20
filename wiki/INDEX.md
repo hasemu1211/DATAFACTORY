@@ -1,4 +1,4 @@
-<!-- Memory path: /home/codelab/Desktop/Project/DATAFACTORY/.memory/ -->
+<!-- Memory path: /home/codelab/Desktop/Project/DATAFACTORY/wiki/ -->
 
 # DATAFACTORY 프로젝트 메모리 인덱스
 
