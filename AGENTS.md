@@ -47,6 +47,18 @@ docker compose --profile ros2 up -d ros2
 - Isaac Sim: `Isaac Sim MCP server started on localhost:8766` 로그 확인
 - ROS2: `docker exec datafactory_ros2 bash -c "source /opt/ros/humble/setup.bash && ros2 topic list"`
 
+### 시각 확인: WebRTC Streaming Client
+
+Isaac Sim 컨테이너는 네이티브 X11 창을 지원하지 않음 → **WebRTC 스트리밍**으로만 GUI 접근.
+
+```bash
+# 프로젝트 루트의 AppImage 실행
+./isaacsim-webrtc-streaming-client-1.0.6-linux-x64.AppImage
+# → 서버 주소: 127.0.0.1 → Connect
+```
+
+포트: `49100` (WebSocket 시그널링, HTTP 아님 — 브라우저 직접 접속 불가) / `8766` (MCP TCP 소켓).
+
 ---
 
 ## MCP 도구 (Claude Code 자동 활성화)
@@ -100,6 +112,9 @@ from isaacsim.core.utils.stage import add_reference_to_stage
 
 - `context7`: Isaac Sim / ROS2 / NumPy API 문서
 - `superpowers`: TDD, 디버깅, 코드 리뷰 워크플로우
+- `oh-my-claudecode`: 멀티 에이전트 오케스트레이션 (deepinit, plan, autopilot, wiki, mcp-setup 등)
+
+**Docker MCP — 현재 iteration deferred** (컨테이너 제어 자동화는 실질적 pain 드러나면 추가 예정). 근거: `robot-dev-omc-setup-guide.md` §11 (최소 스킬/MCP 세트 원칙, YAGNI) — `docker compose` 명령 수동 실행으로 충분.
 
 ---
 

@@ -178,6 +178,36 @@ uv pip install "mcp[cli]"
 claude mcp add isaac-sim -- uv --directory ~/Desktop/Project/isaac-sim-mcp run isaac_mcp/server.py
 ```
 
+### mcp 1.27.0 호환성 패치 (중요)
+
+`isaac-sim-mcp` 업스트림은 `mcp<1.0` 기준으로 작성됨. 설치된 `mcp>=1.27.0`에서는 `FastMCP` 생성자 시그니처와 도구 리턴 타입이 변경됨 → 패치 없이 서버 실행 시 `TypeError`.
+
+**`isaac_mcp/server.py` 수정 필요:**
+
+```python
+# 변경 전 (mcp < 1.0 / FastMCP 레거시)
+mcp = FastMCP(
+    name="isaac-sim",
+    description="Isaac Sim MCP server",  # 1.27에서 제거됨
+)
+
+# 변경 후 (mcp >= 1.27)
+mcp = FastMCP(name="isaac-sim")  # description 인수 삭제
+```
+
+도구 함수 리턴 타입도 `dict` → `list[TextContent]`로 변환 필요 (FastMCP 내부에서 자동 wrapping 되던 동작이 변경).
+
+```python
+# 변경 전
+return {"status": "ok", "payload": data}
+
+# 변경 후
+from mcp.types import TextContent
+return [TextContent(type="text", text=json.dumps({"status": "ok", "payload": data}))]
+```
+
+> 이 패치는 업스트림 PR 대기 중. 업그레이드 후 `isaac_mcp/server.py` 재확인 필요.
+
 ---
 
 ## 3단계: Docker Compose 아키텍처

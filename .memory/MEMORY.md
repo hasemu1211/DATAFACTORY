@@ -1,3 +1,5 @@
+<!-- Memory path: /home/codelab/Desktop/Project/DATAFACTORY/.memory/ -->
+
 # DATAFACTORY 프로젝트 메모리 인덱스
 
 > 세션 간 교훈과 결정사항을 누적 기록합니다.
@@ -9,6 +11,7 @@
 - [Isaac Sim 교훈](lessons_isaac_sim.md) — 컨테이너 한계, WebRTC 구조, RTX 5060, ROS2 Bridge
 - [Docker/Compose 교훈](lessons_docker.md) — profiles, 이름 충돌, 통신 구조
 - [MCP 연동 교훈](lessons_mcp.md) — --exec Python API 활성화, 4.5.0 API 패치, mcp 1.27.0 호환
+- [tmux+wezterm 교훈](lessons_tmux_wezterm.md) — xclip 필수, mouse.conf, `prefix + \` 바인딩 (Shift 없음), OMC 4.13.0 글로벌 설치 기록
 
 ## 현재 프로젝트 상태 (2026-04-17)
 

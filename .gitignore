@@ -24,3 +24,17 @@ __pycache__/
 
 # 프로젝트 메모리 — 다른 환경 세팅용으로 버전 관리에 포함
 # .memory/
+
+# OMC runtime state (per-session, not tracked)
+.omc/sessions/
+.omc/logs/
+.omc/notepad.md
+.omc/project-memory.json
+# Exclude runtime subdirs under state/ but allow tracked state files
+.omc/state/checkpoints/
+.omc/state/sessions/
+.omc/state/agent-replay-*.jsonl
+.omc/state/hud-stdin-cache.json
+.omc/state/ralplan-state.json
+.omc/state/mission-state.json
+.omc/state/subagent-tracking.json
