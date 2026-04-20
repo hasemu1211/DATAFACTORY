@@ -121,7 +121,9 @@
       "Bash(git -C ~/robot checkout -- AGENTS.md)",
       "Bash(git -C ~/robot log --oneline)",
       "Bash(git -C /home/codelab/Desktop/Project/DATAFACTORY status --short)",
-      "Bash(docker volume *)"
+      "Bash(docker volume *)",
+      "Bash(git -c user.name=hasemu1211 -c user.email=hasemu1211@gmail.com commit -m ' *)",
+      "Bash(git -c user.name=\"hasemu1211\" -c user.email=\"hasemu1211@gmail.com\" commit -m \"chore: settings.local.json allowlist updates \\(session-accumulated\\)\")"
     ]
   },
   "enableAllProjectMcpServers": true,
