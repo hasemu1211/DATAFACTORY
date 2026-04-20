@@ -5,6 +5,28 @@
 
 ---
 
+## Prerequisites 체크리스트
+
+이 중 빠지면 무음 실패가 빈번합니다:
+
+- [ ] **NVIDIA 드라이버** (≥ 470 권장): `nvidia-smi`로 확인
+- [ ] **Docker Engine** + **NVIDIA Container Toolkit** (1단계 참조)
+- [ ] **NGC 로그인**: `docker login nvcr.io` (Isaac Sim 이미지 pull 권한)
+- [ ] **jq** (≥ 1.6): Claude Code statusline + SessionStart 훅 JSON 처리
+- [ ] **xclip + xsel**: wezterm/tmux X11 클립보드 연동. 미설치 시 복사 무음 실패
+- [ ] **libfuse2**: AppImage 실행 필수 (Ubuntu 22.04+는 별도 설치 필요)
+- [ ] **tmux 3.2+**: `tmux -V`로 확인. 3.0 미만은 일부 바인딩 문법 차이
+- [ ] **IBus autostart**: `~/.xprofile`에 IBus 환경변수 + `xhost +local:docker`
+- [ ] **WezTerm `use_ime=true`**: 한국어 입력. `~/.config/wezterm/wezterm.lua`
+- [ ] **Node.js 20+, Claude Code CLI, OMC 플러그인**: `/plugin install oh-my-claudecode`
+
+한 줄 설치 (Ubuntu 22.04):
+```bash
+sudo apt-get install -y jq xclip xsel libfuse2 tmux
+```
+
+---
+
 ## 아키텍처 개요
 
 ```

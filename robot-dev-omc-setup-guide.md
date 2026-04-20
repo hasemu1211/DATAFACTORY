@@ -320,15 +320,25 @@ chmod +x ~/robot/scripts/dev-session.sh
 - [x] ROS2 MCP (rosbridge 9090)
 - [x] GitHub MCP, NotebookLM CLI
 
-### ~/robot 신규 레포에서 해야 할 것
-- [ ] `~/robot/` 디렉토리 생성 + `git init`
-- [ ] git submodule 구조 구성 (`isaac-sim/`, `ros2/`)
-- [ ] 프로젝트별 `.claude/settings.json` MCP 격리 설정
-- [ ] 메인 레포: Docker MCP 설치
-- [ ] `dev-session.sh` 스크립트 작성 및 테스트
-- [ ] 메인 `AGENTS.md` + 각 서브모듈 `AGENTS.md` (`/oh-my-claudecode:deepinit` 활용)
-- [ ] 루트에 OMC wiki 활성 (크로스 서브모듈 지식 축적)
-- [ ] 웹 서치 MCP 추가 (Exa 추천, `/oh-my-claudecode:mcp-setup`)
+### ~/robot 신규 레포에서 이뤄진 것 (2026-04-20 iteration 1 완료)
+- [x] `~/robot/` 디렉토리 생성 + `git init` (commit `eacfce2`)
+- [x] ~~git submodule 구조~~ → **Option B (symlink)**로 대체: `~/robot/datafactory` → `~/Desktop/Project/DATAFACTORY`. 이유: V&V 무중단, 단순 rollback (spec §Alternatives considered)
+- [x] 프로젝트별 `.claude/settings.json` + `.mcp.json` MCP 격리 검증 (AC-5.2)
+- [x] ~~메인 레포 Docker MCP~~ → **deferred** (YAGNI, spec Non-goals)
+- [x] ~~`dev-session.sh`~~ → **`bootstrap-child.sh`**가 더 일반적인 역할 (신규 자식 생성 + 기존 레포 심링크 등록)
+- [x] 메인 `AGENTS.md` (navigation) + child `AGENTS.md` (DATAFACTORY 기존 유지)
+- [x] 글로벌 wiki 4 stubs (isaac/ros2/omc/mcp) + 2-Tier SessionStart 훅
+- [x] ~~Exa WebSearch MCP~~ → **deferred** (YAGNI)
+- [x] 4-iteration Ralplan consensus plan + ADR (`~/robot/.omc/plans/robot-setup-repo-plan.md`)
+- [x] Phase 0 Doc Audit (20/35 COVERED, 3 GAPs closed)
+- [x] BLOCKING smoke: Isaac Sim MCP 8766 + ROS2 9090 + `execute_script` 4.5.0 API round-trip
+
+### 비목표 (iteration 1에서 의도적으로 제외)
+- ros2/isaac-sim 별도 git submodule 분리
+- Doc-driven config 자동화 (AGENTS.md 파싱 → MCP 설정)
+- CI/hook 기반 drift 자동 감지 (장기 목표로만 기록)
+- `/oh-my-claudecode:team` 3-agent 병렬 격리 (관찰 전용, Anthropic #16177/#4476 미해결)
+- robot-전용 커스텀 스킬 사전 생성 (`robot-mcp-wire`, `isaac-api-guard`, `ros2-bridge-verify`)
 
 ---
 
@@ -425,3 +435,66 @@ chmod +x ~/robot/scripts/dev-session.sh
 3. 글로벌: `~/.claude/settings.json` 의 `mcpServers`
 
 서브모듈에서 로컬 `.mcp.json`이 있으면 해당 MCP만 활성 — 이게 섹션 3 설계의 핵심.
+
+---
+
+## 13. Troubleshooting (pain-points 통합, 2026-04-20)
+
+실제 이 가이드를 따르면서 반복적으로 실수하거나 디버깅에 시간이 걸렸던 문제들. 각 항목은 관련 wiki 파일의 상세로 연결됩니다.
+
+### (a) Isaac Sim 4.5.0 Docker 설치 + Blackwell sm_120
+- **증상**: `iray photoreal` GPU 미지원 경고, `OmniHub inaccessible`, `IOMMU is enabled`
+- **원인**: RTX 5060 출시 전 릴리즈 → iray는 미지원. RTX Renderer는 정상 (합성 데이터 생성에 사용)
+- **해결**: 경고 무시. ENV_SETUP §3 "무시 가능한 경고/에러" 표 참조
+- **wiki**: [`wiki/isaac_sim_api_patterns.md` § RTX 5060 호환성](wiki/isaac_sim_api_patterns.md)
+
+### (b) WebRTC Streaming Client + 포트 49100
+- **증상**: 브라우저로 `http://localhost:49100` → HTTP 501 / 빈 페이지
+- **원인**: 49100은 WebSocket 시그널링 (HTTP 아님)
+- **해결**: [Isaac Sim WebRTC Streaming Client AppImage](https://github.com/isaac-sim/IsaacSim-WebRTC-Streaming-Client/releases) standalone 실행 → `127.0.0.1` Connect
+- **사전**: `sudo apt-get install libfuse2` (Ubuntu 22.04+)
+- **wiki**: [`wiki/isaac_sim_api_patterns.md` § WebRTC 스트리밍](wiki/isaac_sim_api_patterns.md)
+
+### (c) MCP extension 활성화 (Kit registry 우회)
+- **증상**: `--enable <name>` exit 55, `[dependencies]` 선언해도 실패
+- **원인**: Kit의 모든 declarative 방식은 registry 조회를 거침 → 로컬 extension은 실패
+- **해결**: `--exec enable_mcp.py`에서 `omni.kit.app.get_app().get_extension_manager().set_extension_enabled()` 호출 (Python API 직접)
+- **wiki**: [`wiki/mcp_lessons.md` § MCP extension 활성화](wiki/mcp_lessons.md), [`wiki/isaac_sim_api_patterns.md` § Kit Extension 로딩](wiki/isaac_sim_api_patterns.md)
+
+### (d) mcp 1.27.0 호환성 패치 (FastMCP breaking changes)
+- **증상**: `isaac-sim-mcp` 서버 시작 시 `TypeError: FastMCP.__init__() got unexpected keyword argument 'description'`
+- **원인**: `mcp<1.0` 기준 업스트림과 `mcp>=1.27` 간 시그니처 차이
+- **해결**: `isaac_mcp/server.py`에서 `FastMCP(name=...)`로 축소, 리턴 타입 `[TextContent(...)]`로 래핑
+- **wiki**: [`wiki/mcp_lessons.md` § mcp 1.27.0 호환성 패치](wiki/mcp_lessons.md)
+
+### (e) Dockerfile.ros2 rosbridge 포트 9090
+- **증상**: `ros-mcp connect_to_robot` connection refused
+- **원인**: rosbridge_websocket_launch.xml이 실행되지 않음 (CMD 누락 또는 포트 매핑 없음)
+- **해결**: `Dockerfile.ros2`에서 `CMD ["bash","-c","source /opt/ros/humble/setup.bash && ros2 launch rosbridge_server rosbridge_websocket_launch.xml"]` + `network_mode: host`
+- **wiki**: [`wiki/ros2_bridge.md` § rosbridge Docker 이미지](wiki/ros2_bridge.md)
+
+### (f) WezTerm + IBus + tmux prefix 키 간섭
+- **증상**: tmux prefix + `|` 바인딩 비활성 (세로 분할 안 됨)
+- **원인**: `use_ime=true` + IBus 한글 모드에서 Shift+\\ 전송이 wezterm에서 정규화되며 tmux가 `|`로 인식 못 함
+- **해결**: `bind '\\' split-window -h` — Shift 없는 `\` 평문 키 바인딩
+- **wiki**: [`wiki/lessons_tmux_wezterm.md` § prefix + \\ 해결](wiki/lessons_tmux_wezterm.md)
+
+### (g) 2-Tier wiki SessionStart 훅 경로
+- **증상**: child에서 parent wiki 참조 안 됨, `## Global wiki` 섹션 비어있음
+- **원인**: 훅 script가 `PARENT=$HOME/robot`로 hard-code. `~/robot/`이 실재해야 함
+- **해결**: Step 11 atomic migration 후 `~/robot/` 존재 확인. 훅 body를 `bash -n`으로 검증
+- **wiki**: [`wiki/omc_workflows.md` § 2-Tier Wiki 패턴](wiki/omc_workflows.md)
+
+### (h) docker-compose dual-path container_name 충돌
+- **증상**: `compose up`이 `container name already in use` 에러
+- **원인**: `docker-compose.yml`에 `container_name: datafactory_isaac_sim` 하드코딩 + `~/Desktop/Project/DATAFACTORY/`와 `~/robot/datafactory/` (심링크) 양쪽에서 compose 실행
+- **해결**: `docker/.env`에 `COMPOSE_PROJECT_NAME=datafactory` 핀 + 하나의 경로에서만 compose up. Step 13 `docker compose ls | jq 'length'` == 1 assertion으로 감지
+- **원칙**: symlink 경유 compose 실행 **금지** (real path `~/Desktop/Project/DATAFACTORY/docker/`에서만 실행)
+
+### 일반 원칙 — OMC-native 디버깅 순서
+
+1. `get_scene_info()` / `connect_to_robot()` — 연결부터 확인
+2. `docker ps --filter 'name=datafactory_'` + `docker logs ... | tail -30` — 컨테이너 측 로그
+3. `ss -tlnp | grep -E '8766|9090'` — 포트 바인딩 확인
+4. `jq -r '.hooks.SessionStart[0].hooks[0].command' .claude/settings.local.json | bash -n` — 훅 syntax
+5. 필요 시 [`wiki/mcp_lessons.md`](wiki/mcp_lessons.md) 검증 순서 참조
