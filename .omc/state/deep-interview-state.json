@@ -1,0 +1,28 @@
+{
+  "active": true,
+  "current_phase": "deep-interview",
+  "state": {
+    "interview_id": "robot-setup-repo-20260420",
+    "type": "brownfield",
+    "initial_idea": "~/robot/를 로봇 개발용 부모 템플릿 레포로 만들고, DATAFACTORY를 robot의 자식 copy(프로젝트 실행 세부사항 제외)로 재정렬. OMC(oh-my-claudecode)를 최대한 활용하는 방향.",
+    "rounds": [],
+    "current_ambiguity": 0.51,
+    "threshold": 0.2,
+    "codebase_context": {
+      "datafactory_structure": "docker/ (streaming/headless/ros2 compose profiles), .mcp.json (isaac-sim, ros-mcp), .memory/ (세션간 교훈), .omc/ (OMC state), AGENTS.md, ENVIRONMENT_SETUP.md, QUICKSTART.md",
+      "omc_global": "~/.claude/CLAUDE.md, settings.json(teammateMode=tmux, effortLevel=xhigh), .omc-config.json, hud/, omc CLI 4.13.0 글로벌 설치",
+      "existing_guide": "robot-dev-omc-setup-guide.md 섹션 1-12 (디렉토리 설계, MCP 격리, tmux 워크스페이스, 컨텍스트 관리 3-layer)",
+      "robot_directory": "~/robot/ 미존재",
+      "prior_brainstorming": "A/B/C 중 '부모-자식' 관계 확정 (robot=템플릿 부모, DATAFACTORY=자식 인스턴스). 동기화 메커니즘은 B′(OMC-native scaffold) 방향 제시, 미확정."
+    },
+    "challenge_modes_used": [],
+    "ontology_snapshots": [],
+    "initial_dimension_scores": {
+      "goal_clarity": 0.6,
+      "constraint_clarity": 0.4,
+      "success_criteria_clarity": 0.2,
+      "context_clarity": 0.85,
+      "rationale": "이전 brainstorming 세션에서 부모-자식 관계는 확정됐으나, 구체적 '완료 정의'가 전혀 없음. 제약은 OMC-native 암시만 있고 명시 부족."
+    }
+  }
+}
