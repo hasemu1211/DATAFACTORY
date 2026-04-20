@@ -123,7 +123,10 @@
       "Bash(git -C /home/codelab/Desktop/Project/DATAFACTORY status --short)",
       "Bash(docker volume *)",
       "Bash(git -c user.name=hasemu1211 -c user.email=hasemu1211@gmail.com commit -m ' *)",
-      "Bash(git -c user.name=\"hasemu1211\" -c user.email=\"hasemu1211@gmail.com\" commit -m \"chore: settings.local.json allowlist updates \\(session-accumulated\\)\")"
+      "Bash(git -c user.name=\"hasemu1211\" -c user.email=\"hasemu1211@gmail.com\" commit -m \"chore: settings.local.json allowlist updates \\(session-accumulated\\)\")",
+      "Bash(xargs -I{} sh -c 'echo \"Tracked modifications: {}\"; [ \"{}\" -eq 0 ] || exit 1')",
+      "Bash(tee /tmp/pre-sed-omc-artifacts.sha256)",
+      "Bash(git -c user.name=\"hasemu1211\" -c user.email=\"hasemu1211@gmail.com\" commit -m \"chore\\(docker\\): COMPOSE_PROJECT_NAME=datafactory pin + allowlist delta\")"
     ]
   },
   "enableAllProjectMcpServers": true,
