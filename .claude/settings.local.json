@@ -133,7 +133,11 @@
       "Read(//tmp/**)",
       "Bash(sed -n '23,30p' .gitignore)",
       "Bash(sed -i 's|^# 프로젝트 메모리 — 다른 환경 세팅용으로 버전 관리에 포함$|# 프로젝트 위키 — 다른 환경 세팅용으로 버전 관리에 포함|' .gitignore)",
-      "Bash(sed -i 's|^# \\\\.memory/$|# wiki/|' .gitignore)"
+      "Bash(sed -i 's|^# \\\\.memory/$|# wiki/|' .gitignore)",
+      "Bash(rg -l 'xclip|xsel|IBus|tmux' wiki/*.md)",
+      "Bash(xargs -I{} echo \"tracked modifications: {} \\(should be 0\\)\")",
+      "Bash(git -C ~/robot status --porcelain)",
+      "Bash(git -c user.name=\"hasemu1211\" -c user.email=\"hasemu1211@gmail.com\" commit -m \"chore: final allowlist delta \\(session end\\)\")"
     ]
   },
   "enableAllProjectMcpServers": true,
