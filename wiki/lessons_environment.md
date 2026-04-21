@@ -19,10 +19,10 @@ export GTK_IM_MODULE=ibus
 export QT_IM_MODULE=ibus
 export XMODIFIERS=@im=ibus
 ```
-- **원인 2:** WezTerm 기본값은 IME 비활성화 → 환경변수가 있어도 입력 안 됨
-- **해결 2:** `~/.config/wezterm/wezterm.lua`에 `config.use_ime = true` 추가
+(- **원인 2:** WezTerm 기본값은 IME 비활성화 → 환경변수가 있어도 입력 안 됨
+- **해결 2:** `~/.config/wezterm/wezterm.lua`에 `config.use_ime = true` 추가,이미함)
 - **원인 3:** IBus 데몬이 깨진 상태 → use_ime 추가 후에도 안 될 수 있음
-- **해결 3:** `ibus-daemon --daemonize --xim --replace` 로 데몬 강제 재시작
+- **해결 3:** `ibus-daemon --daemonize --xim --replace` 로 데몬 강제 재시작(바로시도)
 
 ## xhost +local:docker 자동화
 - 매 세션마다 수동으로 치지 않으려면 `~/.xprofile`에 추가

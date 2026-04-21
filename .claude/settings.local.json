@@ -137,7 +137,16 @@
       "Bash(rg -l 'xclip|xsel|IBus|tmux' wiki/*.md)",
       "Bash(xargs -I{} echo \"tracked modifications: {} \\(should be 0\\)\")",
       "Bash(git -C ~/robot status --porcelain)",
-      "Bash(git -c user.name=\"hasemu1211\" -c user.email=\"hasemu1211@gmail.com\" commit -m \"chore: final allowlist delta \\(session end\\)\")"
+      "Bash(git -c user.name=\"hasemu1211\" -c user.email=\"hasemu1211@gmail.com\" commit -m \"chore: final allowlist delta \\(session end\\)\")",
+      "Bash(~/robot/scripts/promote.sh --help)",
+      "Bash(~/robot/scripts/promote.sh datafactory/wiki/lessons_mcp.md --dry-run)",
+      "Bash(uvx --help)",
+      "Bash(ln -s ~/Desktop/Project/isaac-sim-mcp ~/robot/isaac-sim-mcp)",
+      "Bash(git -C ~/robot log --oneline -5)",
+      "Bash(git -C /home/codelab/Desktop/Project/DATAFACTORY log --oneline -5)",
+      "Bash(git -C ~/robot log --oneline -4)",
+      "Bash(gh search *)",
+      "Bash(git -C ~/robot status --short)"
     ]
   },
   "enableAllProjectMcpServers": true,
@@ -150,7 +159,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "PARENT=$HOME/robot; ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo \"$PARENT\"); { echo \"## Global wiki\"; cat \"$PARENT/wiki/INDEX.md\" 2>/dev/null; echo; echo \"## Project wiki\"; cat \"$ROOT/wiki/INDEX.md\" 2>/dev/null; echo; echo \"## AGENTS.md\"; cat \"$ROOT/AGENTS.md\" 2>/dev/null; } | jq -Rs '{hookSpecificOutput: {hookEventName: \"SessionStart\", additionalContext: .}}'"
+            "command": "PARENT=$HOME/robot; ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo \"$PARENT\"); { echo \"## Global wiki\"; cat \"$PARENT/wiki/INDEX.md\" 2>/dev/null; echo; if [ \"$ROOT\" != \"$PARENT\" ]; then echo \"## Project wiki\"; cat \"$ROOT/wiki/INDEX.md\" 2>/dev/null; echo; fi; echo \"## AGENTS.md\"; cat \"$ROOT/AGENTS.md\" 2>/dev/null; } | jq -Rs '{hookSpecificOutput: {hookEventName: \"SessionStart\", additionalContext: .}}'"
           }
         ]
       }
@@ -160,7 +169,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "PARENT=$HOME/robot; ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo \"$PARENT\"); { echo \"## Global wiki\"; cat \"$PARENT/wiki/INDEX.md\" 2>/dev/null; echo; echo \"## Project wiki\"; cat \"$ROOT/wiki/INDEX.md\" 2>/dev/null; echo; echo \"## AGENTS.md\"; cat \"$ROOT/AGENTS.md\" 2>/dev/null; } | jq -Rs '{hookSpecificOutput: {hookEventName: \"PostCompact\", additionalContext: .}}'"
+            "command": "PARENT=$HOME/robot; ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo \"$PARENT\"); { echo \"## Global wiki\"; cat \"$PARENT/wiki/INDEX.md\" 2>/dev/null; echo; if [ \"$ROOT\" != \"$PARENT\" ]; then echo \"## Project wiki\"; cat \"$ROOT/wiki/INDEX.md\" 2>/dev/null; echo; fi; echo \"## AGENTS.md\"; cat \"$ROOT/AGENTS.md\" 2>/dev/null; } | jq -Rs '{hookSpecificOutput: {hookEventName: \"PostCompact\", additionalContext: .}}'"
           }
         ]
       }

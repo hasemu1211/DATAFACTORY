@@ -1,28 +1,32 @@
 {
-  "active": true,
+  "active": false,
+  "paused_reason": "Waiting for Q1 (MCP isolation) results from sibling session before continuing event system design",
+  "paused_at": "2026-04-20",
   "current_phase": "deep-interview",
   "state": {
-    "interview_id": "robot-setup-repo-20260420",
+    "interview_id": "event-propagation-hook-system-20260420",
     "type": "brownfield",
-    "initial_idea": "~/robot/를 로봇 개발용 부모 템플릿 레포로 만들고, DATAFACTORY를 robot의 자식 copy(프로젝트 실행 세부사항 제외)로 재정렬. OMC(oh-my-claudecode)를 최대한 활용하는 방향.",
+    "initial_idea": "tmux 세션 간 이벤트 전파 훅 시스템. git post-commit (child 세션) → ~/robot/.omc/events/pending.jsonl → curator session UserPromptSubmit hook이 읽고 주입. 이벤트 스키마, 필터, 아카이브, 주입 포맷, 실패 모드, bootstrap 통합 구체화 필요.",
     "rounds": [],
-    "current_ambiguity": 0.51,
+    "current_ambiguity": 0.41,
     "threshold": 0.2,
     "codebase_context": {
-      "datafactory_structure": "docker/ (streaming/headless/ros2 compose profiles), .mcp.json (isaac-sim, ros-mcp), wiki/ (세션간 교훈), .omc/ (OMC state), AGENTS.md, ENVIRONMENT_SETUP.md, QUICKSTART.md",
-      "omc_global": "~/.claude/CLAUDE.md, settings.json(teammateMode=tmux, effortLevel=xhigh), .omc-config.json, hud/, omc CLI 4.13.0 글로벌 설치",
-      "existing_guide": "robot-dev-omc-setup-guide.md 섹션 1-12 (디렉토리 설계, MCP 격리, tmux 워크스페이스, 컨텍스트 관리 3-layer)",
-      "robot_directory": "~/robot/ 미존재",
-      "prior_brainstorming": "A/B/C 중 '부모-자식' 관계 확정 (robot=템플릿 부모, DATAFACTORY=자식 인스턴스). 동기화 메커니즘은 B′(OMC-native scaffold) 방향 제시, 미확정."
+      "robot_repo": "~/robot/ (8 commits, 2-Tier wiki hooks + bootstrap-child.sh + promote.sh)",
+      "child_repo": "~/robot/datafactory/ (symlink to ~/Desktop/Project/DATAFACTORY, 10+ commits)",
+      "existing_hooks": "SessionStart + PostCompact in .claude/settings.json — cat wiki INDEX + AGENTS.md",
+      "omc_artifacts_convention": ".omc/{specs,plans,research} tracked, state/sessions/logs ignored",
+      "bootstrap_child": "~/robot/scripts/bootstrap-child.sh creates .claude/settings.json with 2-Tier hooks inherited",
+      "promote_sh": "child→parent wiki 승격 helper (git mv + INDEX update)",
+      "existing_tools": "jq, WebSearch/WebFetch, github-mcp-server, context7 — 모두 사용 가능"
     },
     "challenge_modes_used": [],
     "ontology_snapshots": [],
     "initial_dimension_scores": {
-      "goal_clarity": 0.6,
-      "constraint_clarity": 0.4,
-      "success_criteria_clarity": 0.2,
-      "context_clarity": 0.85,
-      "rationale": "이전 brainstorming 세션에서 부모-자식 관계는 확정됐으나, 구체적 '완료 정의'가 전혀 없음. 제약은 OMC-native 암시만 있고 명시 부족."
+      "goal_clarity": 0.65,
+      "constraint_clarity": 0.50,
+      "success_criteria_clarity": 0.40,
+      "context_clarity": 0.90,
+      "rationale": "메커니즘(git post-commit + UserPromptSubmit hook)과 저장 위치(pending.jsonl)는 명시됐으나 6개 sub-topic (schema, filter, archive, injection format, failure modes, bootstrap integration)에 대한 구체적 결정이 없음. Context는 매우 높음 — ~/robot/ + DATAFACTORY + OMC 맥락 모두 보유."
     }
   }
 }
