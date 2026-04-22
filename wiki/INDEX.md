@@ -14,6 +14,12 @@
 - [tmux+wezterm 교훈](lessons_tmux_wezterm.md) — xclip 필수, mouse.conf, `prefix + \` 바인딩 (Shift 없음), OMC 4.13.0 글로벌 설치 기록, **Gemini CLI(Ink) 자동 submit = paste-buffer + C-m**
 - [OMC↔OmG 통합 교훈](lessons_omc_omg_boundary.md) — Gemini=untrusted input, HTTP citation 게이트, `-e none`·Pro 모델 조합, 세션 이어받기 금지, ACL 파일 레벨 강제
 
+## 외부 지식 계층 (Knowledge Tier) — AGENTS.md §외부 지식 계층 참조
+- **T1 NotebookLM CLI** (큐레이트 corpus, 무료 50q/day) — 상세: [`../notebooklm-cli-guide.md`](../notebooklm-cli-guide.md)
+- **T2 context7 MCP** (표준 라이브러리 공식 문서)
+- **T3 omg-bridge.sh** (Gemini 웹 리서치, V&V 게이트 필수)
+- **T4 Claude WebFetch** (정밀 URL 검증)
+
 ## 현재 프로젝트 상태 (2026-04-17)
 
 ### Phase 1 완료

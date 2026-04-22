@@ -32,14 +32,13 @@
     },
     {
       "step": 2,
-      "name": "외부 레퍼런스 Gemini 위임",
-      "commands": [
-        "cp .omc/state/pending_research.md.template .omc/state/pending_research.md",
-        "# 편집 후:",
-        "OMG_BRIDGE_MODEL=gemini-3-flash-preview bash .omc/scripts/omg-bridge.sh"
+      "name": "외부 레퍼런스 수집 (Knowledge Tier 순)",
+      "order": [
+        "T1 NotebookLM 먼저: `python3 -m notebooklm ask \"<인터뷰에서 나온 질문>\"` (curated corpus 50q/day 한도, Phase 2 직결 자료 이미 로드됨)",
+        "T1에서 답 못 찾으면 T3 omg-bridge: `cp .omc/state/pending_research.md.template .omc/state/pending_research.md` → 편집 → `OMG_BRIDGE_MODEL=gemini-3-flash-preview bash .omc/scripts/omg-bridge.sh`",
+        "bridge exit 2 fallback: Claude 직접 WebFetch로 핵심 URL 1-2건 검증"
       ],
-      "consume": ".omc/state/gemini_distill.json (citations valid URL + code snippets)",
-      "fallback": "exit 2일 경우 Claude가 직접 WebFetch로 핵심 URL 1-2건 확보"
+      "consume": "NotebookLM 답변 + `.omc/state/gemini_distill.json` (citations valid URL + code snippets)"
     },
     {
       "step": 3,
@@ -78,12 +77,25 @@
       "research": "gemini-3-flash-preview (웹 grounding 필요 시)"
     }
   },
-  "deferred_tools": {
-    "notebooklm_cli": {
-      "status": "not_installed, deferred",
-      "rationale": "OmG에 직접 연동 없음. 비공식 CLI 보안·브레이크 리스크. 현재 omg-bridge 로 외부 리서치 충분 (실증 22s/2 citations). 실질 pain 드러나면 도입.",
-      "revisit_trigger": "Phase 2+ 에서 대량 PDF/논문 묶음 RAG가 주 work flow가 되거나, bridge distill 품질이 불충분해질 때"
+  "knowledge_tiers": {
+    "note": "AGENTS.md §외부 지식 계층 정식 규약. 세션 시작 시 반드시 인지.",
+    "T1_notebooklm": {
+      "status": "installed (v0.3.4, authenticated)",
+      "notebook_id": "7cf81435-cc9d-419e-8dfa-fe88c02dfa42",
+      "notebook_title": "Isaac Sim and Robotics Simulation DATAFACTORY",
+      "corpus": "Sim-to-Real Isaac Sim, Camera Projection guide, Statistical Divergences 등 Phase 2 직결 자료 이미 로드",
+      "quota": "~50 query/day (free tier)",
+      "trust_level": "high (user-curated)",
+      "guide": "notebooklm-cli-guide.md"
     },
+    "T2_context7_mcp": {"status": "registered", "trust_level": "high"},
+    "T3_omg_bridge": {
+      "status": "installed (.omc/scripts/omg-bridge.sh v3.3)",
+      "trust_level": "low — V&V HTTP citation 게이트 필수"
+    },
+    "T4_claude_webfetch": {"status": "native", "trust_level": "medium — 정밀 URL 검증용"}
+  },
+  "deferred_tools": {
     "docker_mcp": {
       "status": "deferred (Phase 1 결정 유지)",
       "rationale": "docker compose 수동 실행으로 충분, YAGNI"

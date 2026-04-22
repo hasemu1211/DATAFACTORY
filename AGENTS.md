@@ -93,6 +93,33 @@ Isaac Sim 컨테이너는 네이티브 X11 창을 지원하지 않음 → **WebR
 
 ---
 
+## 외부 지식 계층 (Knowledge Tier) — **새 세션 시작 시 반드시 인지**
+
+질문 성격에 따라 **저비용 계층부터** 선택. 4계층은 상호 보완적, 중복 호출 지양.
+
+| 계층 | 도구 | 적합 상황 | 비용 | 명령 예시 |
+|---|---|---|---|---|
+| **T1 Curated** | **NotebookLM CLI** (v0.3.4, 설치완료) | 큐레이트된 논문·가이드 corpus 기반 정답 (Sim-to-Real, Camera Projection, Statistical Divergences 등 이미 로드됨) | 무료 ~50 query/day | `python3 -m notebooklm ask "질문"` |
+| **T2 Official** | `context7` MCP | NumPy/OpenCV/ROS2 등 표준 라이브러리 최신 API 문서 | 저비용 | MCP 호출 (자동) |
+| **T3 Broad Web** | `omg-bridge.sh` (Gemini CLI) | T1·T2에 없는 외부 웹 리서치 (NVIDIA 포럼·GitHub 이슈 등), 대량 PDF 요약 | Gemini quota 소비 | `OMG_BRIDGE_MODEL=gemini-3-flash-preview bash .omc/scripts/omg-bridge.sh` |
+| **T4 Precision** | Claude `WebFetch` | T3 결과 소수 URL 정밀 검증, 인용 확인 | Claude 토큰 | Claude 내장 |
+
+**선택 플로차트**:
+1. 질문이 "내가 큐레이트한 자료에 있을 것 같은가?" → **T1 NotebookLM** 먼저
+2. 표준 라이브러리 API냐? → **T2 context7**
+3. 둘 다 아니고 웹 전반에서 찾아야? → **T3 omg-bridge**
+4. 소수 URL 깊이 검증이 필요한 경우 → **T4 WebFetch** 1-2건만
+
+**NotebookLM 운영 규약** (세부 `notebooklm-cli-guide.md`):
+- 활성 notebook: `7cf81435-...` (Isaac Sim and Robotics Simulation DATAFACTORY)
+- 주요 명령: `ask` (질의), `source list` (소스 목록), `source fulltext <id>` (전체 텍스트 추출 → Claude에게 전달), `source add --url/--file` (새 자료), `generate report` + `download report` (Phase 5 보조)
+- 쿼리 한도: ~50/day → 중요도 높은 질문에만 사용
+- 답변이 모호하면 `source fulltext`로 원문 확보 후 Claude가 직접 판단
+
+**원칙**: T1 NotebookLM은 "private curated = high trust", T3 Gemini는 "untrusted input = V&V 게이트 필수". 신뢰도 계층이 비용 계층보다 우선.
+
+---
+
 ## Isaac Sim 4.5.0 API (execute_script 작성 시 필수)
 
 ```python
