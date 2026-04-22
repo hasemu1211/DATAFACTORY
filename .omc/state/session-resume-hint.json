@@ -1,0 +1,30 @@
+{
+  "last_session_date": "2026-04-22",
+  "project": "DATAFACTORY (LIMO PRO 물류 AMR V&V)",
+  "current_phase": "Phase 1 종료 / Phase 2 kickoff 대기",
+  "next_entry_point": {
+    "action": "Phase 2 (Pillar A — 3D 투영·Brown-Conrady 왜곡 보정) 실제 착수",
+    "source_of_truth": "V&V 기반 로봇 비전 데이터 파이프라인 구축 기획.md",
+    "recommended_command": "/oh-my-claudecode:brainstorm (또는 /plan) with the 기획.md as input",
+    "deliverable": "Pillar A 세부 실행 plan + 카메라 K 추출 스크립트 첫 PR"
+  },
+  "harness_strategy": {
+    "primary": "OMC (Claude Code) — orchestrator/editor",
+    "delegation": "OmG (Gemini) — file-based sub-processor for external research",
+    "bridge": ".omc/scripts/omg-bridge.sh v3.3",
+    "boundary_spec": ".omc/specs/omg-integration-v1.md",
+    "lessons": "wiki/lessons_omc_omg_boundary.md"
+  },
+  "invariants_2026-04-22": [
+    "Gemini 출력은 untrusted input — HTTP citation 게이트 통과 후 수용",
+    "OmG autopilot·ultrawork·ralph 상설 OFF (OMC 전속)",
+    "`.omc/scripts/**`·`.omc/specs/**` Gemini 쓰기 금지 (GEMINI.md §4.4)",
+    "세션 중간 모델 교체(OMC↔OmG) 금지 — anti-pattern"
+  ],
+  "active_infra": {
+    "mcp": ["isaac-sim:8766", "ros-mcp:9090"],
+    "omc_version": "4.13.0",
+    "omg_version": "0.8.1",
+    "gemini_model_default": "gemini-3-flash-preview (bridge), gemini-2.5-flash-lite (quick)"
+  }
+}

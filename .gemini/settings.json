@@ -1,0 +1,34 @@
+{
+  "hooks": {
+    "BeforeTool": [],
+    "AfterTool": [],
+    "BeforeAgent": [],
+    "AfterAgent": [],
+    "Notification": [],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "PARENT=$HOME/robot; ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo \"$PARENT\"); { echo \"## Global wiki\"; cat \"$PARENT/wiki/INDEX.md\" 2>/dev/null; echo; if [ \"$ROOT\" != \"$PARENT\" ]; then echo \"## Project wiki\"; cat \"$ROOT/wiki/INDEX.md\" 2>/dev/null; echo; fi; echo \"## AGENTS.md\"; cat \"$ROOT/AGENTS.md\" 2>/dev/null; } | jq -Rs '{hookSpecificOutput: {hookEventName: \"SessionStart\", additionalContext: .}}'",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [],
+    "PreCompress": [],
+    "BeforeModel": [],
+    "AfterModel": [],
+    "BeforeToolSelection": [],
+    "PostCompact": [
+      {
+        "hooks": [
+          {
+            "command": "PARENT=$HOME/robot; ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo \"$PARENT\"); { echo \"## Global wiki\"; cat \"$PARENT/wiki/INDEX.md\" 2>/dev/null; echo; if [ \"$ROOT\" != \"$PARENT\" ]; then echo \"## Project wiki\"; cat \"$ROOT/wiki/INDEX.md\" 2>/dev/null; echo; fi; echo \"## AGENTS.md\"; cat \"$ROOT/AGENTS.md\" 2>/dev/null; } | jq -Rs '{hookSpecificOutput: {hookEventName: \"PostCompact\", additionalContext: .}}'",
+            "type": "command"
+          }
+        ]
+      }
+    ]
+  }
+}

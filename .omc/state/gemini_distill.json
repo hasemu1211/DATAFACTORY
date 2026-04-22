@@ -1,0 +1,20 @@
+{
+  "summary": "Isaac Sim 4.5.0 utilizes the 'isaacsim.core.api.sensors.Camera' class to retrieve camera intrinsics via 'get_intrinsics_matrix()'. The intrinsic matrix K follows the pinhole model where focal lengths are calculated as fx = f * Width / sensor_width and fy = f * Height / sensor_height. Verification is performed by comparing 2D projected coordinates 'u = K * [R|t] * X' against ground truth pixel values. Standard error metrics include Mean Reprojection Error (MRE) and RMSE to quantify the spatial deviation epsilon between simulated and mathematical projections.",
+  "citations": [
+    "https://docs.omniverse.nvidia.com/isaacsim/latest/reference_python_api.html",
+    "https://docs.omniverse.nvidia.com/isaacsim/latest/features/sensors/camera.html"
+  ],
+  "code_snippets": [
+    "from isaacsim.core.api.sensors import Camera; camera = Camera(prim_path='/World/Camera'); K = camera.get_intrinsics_matrix()",
+    "P_pixel = K @ (R @ P_world + t); u = P_pixel[0]/P_pixel[2]; v = P_pixel[1]/P_pixel[2]",
+    "epsilon = np.mean(np.linalg.norm(u_gt - u_proj, axis=1))"
+  ],
+  "citations_invalid": [],
+  "token_usage": {
+    "input": 30567,
+    "output": 362
+  },
+  "provider": "gemini-cli",
+  "session_id": "2e82c2e3-5d98-4b0c-ad4d-62606b60037a",
+  "finished_at": "2026-04-22T02:11:14Z"
+}

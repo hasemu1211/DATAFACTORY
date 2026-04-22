@@ -39,3 +39,29 @@ __pycache__/
 .omc/state/mission-state.json
 .omc/state/subagent-tracking.json
 .omc/state/last-tool-error.json
+.omc/state/*.tmp
+.omc/state/*.bak-*
+
+# Gemini CLI (부분 추적: config만, 런타임/비밀 제외)
+.gemini/auth*
+.gemini/tmp*
+.gemini/sessions/
+.gemini/history*
+.gemini/logs/
+
+# OmG 런타임 상태 (매 턴 변경)
+.omg/state/sessions/
+.omg/state/quota-watch.json
+.omg/state/session-lock.json
+.omg/state/hud.json
+.omg/state/learn-watch.json
+.omg/state/deep-interview.json
+.omg/state/workflow.md
+.omg/state/checkpoint.md
+.omg/state/taskboard.md
+
+# 백업 파일 (편집기 자동 생성)
+*.bak
+
+# Claude Code 스케줄 락
+.claude/scheduled_tasks.lock

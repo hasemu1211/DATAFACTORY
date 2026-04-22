@@ -57,3 +57,21 @@
 - `~/.claude/hud/omc-hud.mjs` (HUD 래퍼)
 - `omc` CLI v4.13.0 전역 설치 (`npm install -g oh-my-claude-sisyphus`)
 - GitHub star 완료
+
+## Gemini CLI(Ink TUI) tmux 자동 submit 패턴 (2026-04-22)
+
+**문제**: 인접 tmux 판에 떠 있는 Gemini CLI에 메시지를 자동 주입하려 `send-keys "text" C-m` (또는 `Enter`) 조합을 쓰면 **Gemini 입력 필드에 줄바꿈만 삽입**되고 submit 되지 않음. 사용자가 수동 Enter 필요.
+
+**작동 패턴 (실측)**:
+```bash
+tmux set-buffer "<message>"
+tmux paste-buffer -t <session:win.pane>
+tmux send-keys -t <session:win.pane> C-m
+```
+→ 입력 큐(`Queued`)에 들어가고 Gemini가 즉시 Thinking 진입.
+
+**대조군**:
+- Claude Code 판: `send-keys "text" C-m` = 정상 submit (Gemini만 다름)
+- Gemini CLI는 Ink(React) 기반 TUI라 연속 키 입력을 "텍스트 입력 중"으로 해석
+
+**적용 범위**: OMC↔OmG 워크플로우에서 Claude가 Gemini 판에 지시 주입하는 모든 경우. 앞으로 `tmux send-keys "<text>" C-m` 형식 쓰지 말 것.

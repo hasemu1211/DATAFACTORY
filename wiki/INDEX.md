@@ -11,7 +11,8 @@
 - [Isaac Sim 교훈](lessons_isaac_sim.md) — 컨테이너 한계, WebRTC 구조, RTX 5060, ROS2 Bridge
 - [Docker/Compose 교훈](lessons_docker.md) — profiles, 이름 충돌, 통신 구조
 - [MCP 연동 교훈](lessons_mcp.md) — --exec Python API 활성화, 4.5.0 API 패치, mcp 1.27.0 호환
-- [tmux+wezterm 교훈](lessons_tmux_wezterm.md) — xclip 필수, mouse.conf, `prefix + \` 바인딩 (Shift 없음), OMC 4.13.0 글로벌 설치 기록
+- [tmux+wezterm 교훈](lessons_tmux_wezterm.md) — xclip 필수, mouse.conf, `prefix + \` 바인딩 (Shift 없음), OMC 4.13.0 글로벌 설치 기록, **Gemini CLI(Ink) 자동 submit = paste-buffer + C-m**
+- [OMC↔OmG 통합 교훈](lessons_omc_omg_boundary.md) — Gemini=untrusted input, HTTP citation 게이트, `-e none`·Pro 모델 조합, 세션 이어받기 금지, ACL 파일 레벨 강제
 
 ## 현재 프로젝트 상태 (2026-04-17)
 
@@ -32,10 +33,15 @@
   - ros-mcp 프로젝트 MCP 등록 완료
   - 검증: `connect_to_robot`, `get_topics` 정상 동작 확인
 
-### 다음 작업
-- **Phase 2**: Isaac Sim Python API로 카메라 K행렬 추출 스크립트 작성
-- **Phase 3**: Omniverse Replicator 도메인 무작위화 스크립트
-- **Phase 4**: ROS2 시공간 동기화 검증
+### 다음 세션 진입점 (Phase 2 실제 kickoff)
+- **Source of Truth**: `V&V 기반 로봇 비전 데이터 파이프라인 구축 기획.md` (LIMO PRO 물류 AMR 정밀 도킹 V&V 기획)
+- **워크플로우**: OMC 주도 (`/oh-my-claudecode:brainstorm` 또는 `/plan` 으로 기획.md 수용 → Phase 2 Pillar A 실행 진입)
+- **핵심 지표**: `Error_3D < 5mm`, `Δt < 15ms` (1.0m/s 이동 기준 15mm 오차), `Fidelity_SNR`
+- **가용 인프라**:
+  - `isaac-sim` MCP (포트 8766), `ros-mcp` (9090)
+  - `.omc/scripts/omg-bridge.sh` v3.3 (외부 레퍼런스 수집 필요 시, Gemini에게 파일 기반 위임)
+  - OmG 상설 역할: research·context-optimize·deep-dive (skill), 금지: autopilot·ultrawork·ralph
+- **Phase 로드맵**: Pillar A(Day 11-20, 투영·왜곡) → Pillar B(Day 21-30, 도메인 무작위화+TensorRT) → Pillar C(Day 31-40, Δt 동적 오차) → 리포트(Day 41-50)
 
 ## MCP 구성 (프로젝트 레벨, .mcp.json)
 - `isaac-sim`: uv run isaac_mcp/server.py → Isaac Sim 포트 8766

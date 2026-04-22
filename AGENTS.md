@@ -21,13 +21,23 @@
 
 ## Phase 현황
 
+> **Source of Truth**: `V&V 기반 로봇 비전 데이터 파이프라인 구축 기획.md`
+> (LIMO PRO 물류 AMR 정밀 도킹 V&V — Error_3D<5mm / Δt<15ms / Fidelity_SNR)
+
 | Phase | 내용 | 상태 |
 |---|---|---|
-| 1 | Docker + Isaac Sim + MCP + ROS2 환경 구축 | **완료** |
-| 2 | 카메라 K행렬, 3D→2D 투영 오차 검증 (30점) | 미시작 |
-| 3 | Omniverse Replicator 통계적 도메인 무작위화 (40점) | 미시작 |
-| 4 | ROS2 시공간 동기화 Δt 측정 (30점) | 미시작 |
-| 5 | 문서화 및 README 완성 | 미시작 |
+| 1 | Docker + Isaac Sim + MCP + ROS2 환경 구축 (환경 kickoff 라운드) | **완료** |
+| 2 | Pillar A — 기구학 기반 3D 투영·Brown-Conrady 왜곡 보정 검증 (Day 11-20) | **기획 초안 완료, 다음 세션 kickoff 대기** |
+| 3 | Pillar B — 도메인 무작위화 + TensorRT(FP16) 에지 추론 최적화 (Day 21-30) | 미시작 |
+| 4 | Pillar C — ApproximateTimeSynchronizer·NITROS 기반 Δt 및 동적 오차 분석 (Day 31-40) | 미시작 |
+| 5 | V&V 기술 리포트 + Linter 100점 포트폴리오 (Day 41-50) | 미시작 |
+
+**Phase 2 실제 실행 경로 (다음 세션)**: `/oh-my-claudecode:brainstorm` 또는 `/plan` 으로 기획.md 수용 → Pillar A 세부 설계 → 실행.
+
+**Gemini 위임 (OMC↔OmG 통합)**:
+- 외부 레퍼런스 수집은 `.omc/state/pending_research.md` 작성 → `bash .omc/scripts/omg-bridge.sh` → `.omc/state/gemini_distill.json` 수용
+- 상세 경계: `.omc/specs/omg-integration-v1.md` / 교훈: `wiki/lessons_omc_omg_boundary.md`
+- **원칙**: Gemini 출력은 untrusted input, V&V 게이트(HTTP citation 검증) 통과 후 수용
 
 ---
 
