@@ -3,14 +3,62 @@
   "project": "DATAFACTORY (LIMO PRO 물류 AMR V&V)",
   "current_phase": "Phase 1 종료 / Phase 2 kickoff 대기",
   "next_entry_point": {
-    "action": "Phase 2 (Pillar A — 3D 투영·Brown-Conrady 왜곡 보정) 실제 착수",
-    "source_of_truth": "V&V 기반 로봇 비전 데이터 파이프라인 구축 기획.md",
-    "recommended_command": "/oh-my-claudecode:brainstorm (또는 /plan) with the 기획.md as input",
-    "deliverable": "Pillar A 세부 실행 plan + 카메라 K 추출 스크립트 첫 PR"
+    "action": "Phase 2 Pillar A (3D 투영·Brown-Conrady 왜곡 보정) 실제 착수",
+    "source_of_truth": "V&V 기반 로봇 비전 데이터 파이프라인 구축 기획.md"
   },
+  "kickoff_preflight_checklist": [
+    {
+      "step": 0,
+      "name": "환경 헬스체크 (수동, 토큰 0)",
+      "commands": [
+        "docker compose --profile streaming ps",
+        "docker compose --profile ros2 ps",
+        "curl -sSf http://localhost:8766 || echo 'isaac-sim MCP DOWN — 부팅 1-2분 대기'",
+        "docker exec datafactory_ros2 bash -c 'source /opt/ros/humble/setup.bash && ros2 topic list'"
+      ],
+      "expected": "Isaac Sim 컨테이너 Up + MCP 포트 응답 + ros2 topic list 출력"
+    },
+    {
+      "step": 1,
+      "name": "요구사항 크리스탈화",
+      "command": "/oh-my-claudecode:deep-interview @'V&V 기반 로봇 비전 데이터 파이프라인 구축 기획.md'",
+      "focus": [
+        "Orbbec DaBai FoV 67.9° 출처 확인",
+        "Error_3D<5mm 측정 방법 (AprilTag 실측 vs 시뮬 GT)",
+        "Δt<15ms 측정 지점 (어느 토픽 타임스탬프 차이)",
+        "LIMO PRO USD 모델 확보 여부",
+        "Undistortion 전후 통계 유의성 N"
+      ]
+    },
+    {
+      "step": 2,
+      "name": "외부 레퍼런스 Gemini 위임",
+      "commands": [
+        "cp .omc/state/pending_research.md.template .omc/state/pending_research.md",
+        "# 편집 후:",
+        "OMG_BRIDGE_MODEL=gemini-3-flash-preview bash .omc/scripts/omg-bridge.sh"
+      ],
+      "consume": ".omc/state/gemini_distill.json (citations valid URL + code snippets)",
+      "fallback": "exit 2일 경우 Claude가 직접 WebFetch로 핵심 URL 1-2건 확보"
+    },
+    {
+      "step": 3,
+      "name": "Phase 2 Pillar A 실행 plan",
+      "command": "/oh-my-claudecode:plan",
+      "deliverable": ".omc/plans/phase2-pillar-a-plan.md"
+    },
+    {
+      "step": 4,
+      "name": "Git branch + 첫 PR 준비",
+      "commands": [
+        "git checkout -b phase2-pillar-a",
+        "# Pillar A 첫 스크립트 작성 (scripts/phase2/extract_camera_intrinsics.py 등)"
+      ]
+    }
+  ],
   "harness_strategy": {
-    "primary": "OMC (Claude Code) — orchestrator/editor",
-    "delegation": "OmG (Gemini) — file-based sub-processor for external research",
+    "primary": "OMC (Claude Code) — orchestrator/editor, 정밀 작업",
+    "delegation": "OmG (Gemini) — file-based sub-processor: bulk scan, external research, TDD boilerplate",
     "bridge": ".omc/scripts/omg-bridge.sh v3.3",
     "boundary_spec": ".omc/specs/omg-integration-v1.md",
     "lessons": "wiki/lessons_omc_omg_boundary.md"
@@ -25,6 +73,20 @@
     "mcp": ["isaac-sim:8766", "ros-mcp:9090"],
     "omc_version": "4.13.0",
     "omg_version": "0.8.1",
-    "gemini_model_default": "gemini-3-flash-preview (bridge), gemini-2.5-flash-lite (quick)"
+    "gemini_models": {
+      "quick": "gemini-2.5-flash-lite (기본, 좁은 질문)",
+      "research": "gemini-3-flash-preview (웹 grounding 필요 시)"
+    }
+  },
+  "deferred_tools": {
+    "notebooklm_cli": {
+      "status": "not_installed, deferred",
+      "rationale": "OmG에 직접 연동 없음. 비공식 CLI 보안·브레이크 리스크. 현재 omg-bridge 로 외부 리서치 충분 (실증 22s/2 citations). 실질 pain 드러나면 도입.",
+      "revisit_trigger": "Phase 2+ 에서 대량 PDF/논문 묶음 RAG가 주 work flow가 되거나, bridge distill 품질이 불충분해질 때"
+    },
+    "docker_mcp": {
+      "status": "deferred (Phase 1 결정 유지)",
+      "rationale": "docker compose 수동 실행으로 충분, YAGNI"
+    }
   }
 }

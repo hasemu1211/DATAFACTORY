@@ -1,0 +1,21 @@
+# Research Request: <Title Here>
+
+## Objective
+<한 문장: 무엇을 밝히려 하는지, 어떤 결정을 지원하는지>
+
+## Key Questions
+1. <narrow question 1 — 단일 사실 질문이 좋음>
+2. <narrow question 2>
+3. <narrow question 3>
+
+## Constraints
+- 반드시 공식 문서/1차 자료 인용 (forum post·issue는 보조)
+- 확실하지 않으면 citations: [] 로 반환 (추정 금지)
+- 코드 스니펫은 실행 가능한 최소 예시
+
+## Usage notes (delete before run)
+- Pro 모델 권장 시: `OMG_BRIDGE_MODEL=gemini-3-flash-preview bash .omc/scripts/omg-bridge.sh`
+- 기본 (flash-lite, 빠름): `bash .omc/scripts/omg-bridge.sh`
+- 타임아웃 연장: `OMG_BRIDGE_TIMEOUT=300 ...`
+- 결과: `.omc/state/gemini_distill.json` (valid citations + code_snippets)
+- 실패(exit 2) 시 fallback: Claude가 직접 WebFetch로 1-2건 검증

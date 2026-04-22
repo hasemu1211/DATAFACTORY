@@ -11,6 +11,12 @@
 #
 # Ownership: .omc/scripts/ is under Claude (OMC). Gemini MUST NOT edit this file.
 # See .omc/specs/omg-integration-v1.md §2.2 (State Manager = Claude).
+#
+# Env vars:
+#   OMG_BRIDGE_MODEL   (default: gemini-2.5-flash-lite; for heavy web grounding use gemini-3-flash-preview)
+#   OMG_BRIDGE_TIMEOUT (default: 180s; extend for multi-source research)
+#
+# Template for input:  .omc/state/pending_research.md.template
 
 set -euo pipefail
 
