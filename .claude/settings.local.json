@@ -173,7 +173,8 @@
       "Bash(rtk docker *)",
       "Bash(/home/codelab/Desktop/Project/DATAFACTORY/scripts/start-session.sh --help)",
       "Bash(rm /home/codelab/Desktop/Project/DATAFACTORY/.claude/commands/start.md)",
-      "Bash(rmdir /home/codelab/Desktop/Project/DATAFACTORY/.claude/commands)"
+      "Bash(rmdir /home/codelab/Desktop/Project/DATAFACTORY/.claude/commands)",
+      "Bash(rtk find *)"
     ]
   },
   "enableAllProjectMcpServers": true,
