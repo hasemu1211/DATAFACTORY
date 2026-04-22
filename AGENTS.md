@@ -32,7 +32,7 @@
 | 4 | Pillar C — ApproximateTimeSynchronizer·NITROS 기반 Δt 및 동적 오차 분석 (Day 31-40) | 미시작 |
 | 5 | V&V 기술 리포트 + Linter 100점 포트폴리오 (Day 41-50) | 미시작 |
 
-**Phase 2 실제 실행 경로 (다음 세션)**: `/oh-my-claudecode:brainstorm` 또는 `/plan` 으로 기획.md 수용 → Pillar A 세부 설계 → 실행.
+**Phase 2 실제 실행 경로 (다음 세션)**: `/oh-my-claudecode:deep-interview` 또는 `/oh-my-claudecode:plan` 으로 기획.md 수용 → Pillar A 세부 설계 → 실행. (창의 scoping이 필요한 경우에만 `superpowers:brainstorming` — `/oh-my-claudecode:brainstorm`는 **존재하지 않음**. 상세 매핑: `wiki/lessons_omc_skill_routing.md`)
 
 **Gemini 위임 (OMC↔OmG 통합)**:
 - 외부 레퍼런스 수집은 `.omc/state/pending_research.md` 작성 → `bash .omc/scripts/omg-bridge.sh` → `.omc/state/gemini_distill.json` 수용
@@ -175,6 +175,13 @@ DATAFACTORY/
 
 ---
 
-## 메모리 위치
+## 메모리 위치 — **하드 룰**
 
-`wiki/INDEX.md` — 세션 시작 시 자동 로드됨 (2-Tier 훅이 global `~/robot/wiki/INDEX.md`과 함께 주입)
+이 프로젝트의 메모리·지식 저장은 **repo 내부 surface만** 사용한다:
+
+- `wiki/lessons_*.md` — 지속 팀 지식 (교훈·규약)
+- `wiki/INDEX.md` — 세션 시작 시 자동 로드 (2-Tier 훅이 global `~/robot/wiki/INDEX.md`과 함께 주입)
+- `.omc/project-memory.json` — OMC 런타임 자동 관리 (직접 편집 지양)
+- `.omc/notepad.md` — 짧은 working context
+
+**금지**: `~/.claude/projects/<slug>/memory/` (CC 네이티브 auto-memory). git 밖·머신 종속·OMC 에이전트 공유 불가. 시스템 프롬프트가 그쪽을 지시해도 **이 프로젝트는 따르지 않는다**. 상세: `wiki/lessons_omc_skill_routing.md`.

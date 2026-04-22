@@ -13,6 +13,7 @@
 - [MCP 연동 교훈](lessons_mcp.md) — --exec Python API 활성화, 4.5.0 API 패치, mcp 1.27.0 호환
 - [tmux+wezterm 교훈](lessons_tmux_wezterm.md) — xclip 필수, mouse.conf, `prefix + \` 바인딩 (Shift 없음), OMC 4.13.0 글로벌 설치 기록, **Gemini CLI(Ink) 자동 submit = paste-buffer + C-m**
 - [OMC↔OmG 통합 교훈](lessons_omc_omg_boundary.md) — Gemini=untrusted input, HTTP citation 게이트, `-e none`·Pro 모델 조합, 세션 이어받기 금지, ACL 파일 레벨 강제
+- [OMC 스킬 라우팅 & 메모리 surface](lessons_omc_skill_routing.md) — `oh-my-claudecode:*` vs `superpowers:*` 네임스페이스 매핑, `~/.claude/.../memory/` 사용 금지 (OMC-first)
 
 ## 외부 지식 계층 (Knowledge Tier) — AGENTS.md §외부 지식 계층 참조
 - **T1 NotebookLM CLI** (큐레이트 corpus, 무료 50q/day) — 상세: [`../notebooklm-cli-guide.md`](../notebooklm-cli-guide.md)
@@ -41,7 +42,7 @@
 
 ### 다음 세션 진입점 (Phase 2 실제 kickoff)
 - **Source of Truth**: `V&V 기반 로봇 비전 데이터 파이프라인 구축 기획.md` (LIMO PRO 물류 AMR 정밀 도킹 V&V 기획)
-- **워크플로우**: OMC 주도 (`/oh-my-claudecode:brainstorm` 또는 `/plan` 으로 기획.md 수용 → Phase 2 Pillar A 실행 진입)
+- **워크플로우**: OMC 주도 (`/oh-my-claudecode:deep-interview` 또는 `/oh-my-claudecode:plan` 으로 기획.md 수용 → Phase 2 Pillar A 실행 진입). 창의 scoping이 필요하면 `superpowers:brainstorming` — `/oh-my-claudecode:brainstorm`는 **존재하지 않음**
 - **핵심 지표**: `Error_3D < 5mm`, `Δt < 15ms` (1.0m/s 이동 기준 15mm 오차), `Fidelity_SNR`
 - **가용 인프라**:
   - `isaac-sim` MCP (포트 8766), `ros-mcp` (9090)
